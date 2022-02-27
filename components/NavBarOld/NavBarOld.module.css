@@ -1,0 +1,14 @@
+.nav {
+    display: flex;
+    justify-content: space-between;
+    background-color: tomato;
+}
+
+.nav__link {
+    text-decoration: none;    
+}
+
+.nav__active {
+    font-size: 1.1rem;
+    font-weight: bold;
+}
