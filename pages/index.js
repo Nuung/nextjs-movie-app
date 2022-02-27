@@ -1,4 +1,6 @@
 
+import Link from "next/link";
+import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import Seo from "../components/Seo";
 
@@ -17,6 +19,27 @@ const Home = ({ results }) => {
     // }, []);
     // SSR로 인해 fetch를 기다리는 Loading을 쓸 필요가 전혀 없어진다!!
 
+    // Link ~ a 대신 page 라우팅 하는 다른 방법!
+    // 게다가 데이터를 props 전달 대신 router "query" 어트리뷰터로써 전달하는 방법
+    const router = useRouter();
+    // const onClick = (movie_id, title) => {
+    //     router.push({
+    //         pathname: `/movie/${movie_id}`,
+    //         // url Query String을 아래와 같이 전달 할 수 있다!!!
+    //         // http://localhost:3000/movie/634649?title=test
+    //         // 그리고 query를 user로 부터 숨길 수 있다! 즉 노출없이 마스킹을 할 수 있다!!
+    //         query: {
+    //             // title: "test"
+    //             title
+    //         }
+    //     }, `/movie/${movie_id}`); // 여기가 query string대신 마스킹해서 user로 부터 숨기는 것! 
+    // };
+
+    // 위 onClick을 아래와 같이 바꿀 수 있다 -> Link 또한 매한가지
+    const onClick = (movie_id, original_title) => {
+        router.push(`/movie/${original_title}/${movie_id}`);
+    }
+
     return (
         <div className="container">
             <Seo title="Home" />
@@ -24,9 +47,24 @@ const Home = ({ results }) => {
             {
                 // ?를 통해 존재하지 않으면 (null, undefined라면 접근하지 않도록 함){
                 results?.map((movie) => (
-                    <div className="movie" key={movie.id}>
+                    <div className="movie" key={movie.id} onClick={() => onClick(movie.id, movie.original_title)}>
                         <img src={`https://image.tmdb.org/t/p/w500/${movie.poster_path}`} />
-                        <h4>{movie.original_title}</h4>
+                        {/* Link도위 Router setting 처럼 줘서 할 수 있다!  */}
+                        {/* <Link
+                            href={{
+                                pathname: `/movie/${movie.id}`,
+                                query: {
+                                    // title: "test"
+                                    title: movie.original_title,
+                                }
+                            }}
+                            as={`/movie/${movie.id}`}
+                        > */}
+                        <Link href={`/movie/${movie.original_title}/${movie.id}`}>
+                            <a>
+                                <h4>{movie.original_title}</h4>
+                            </a>
+                        </Link>
                     </div>
                 ))
             }
@@ -50,6 +88,9 @@ const Home = ({ results }) => {
                 .movie h4 {
                     font-size: 18px;
                     text-align: center;
+                }
+                .movie a {
+                    text-decoration: none;
                 }
             `}</style>
         </div>

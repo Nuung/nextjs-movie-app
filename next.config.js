@@ -32,6 +32,10 @@ const nextConfig = {
       {
         source: "/api/movies",
         destination: `https://api.themoviedb.org/3/movie/popular?api_key=${API_KEY}&language=en-US&page=1"`,
+      },
+      {
+        source: "/api/movie/:movie_id",
+        destination: `https://api.themoviedb.org/3/movie/:movie_id?api_key=${API_KEY}&language=en-US&page=1"`,
       }
     ]
   }
